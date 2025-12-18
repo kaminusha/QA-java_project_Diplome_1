@@ -92,9 +92,9 @@ public class BurgerPriceCalculationTest {
         }
     }
 
-    // Тест: проверяем, что getPrice() возвращает ожидаемую цену, используя проверки разных сценариев
+    // Тест проверяет, что getPrice() возвращает ожидаемую цену, используя проверки разных сценариев
     @Test
-    public void getPrice_shouldReturnCorrectTotalPriceForAllScenarios() {
+    public void shouldReturnExpectedPriceWhenCalculatingTotal() {
         float actualPrice = burger.getPrice();
         assertEquals("Тест: " + testScenario + " → ожидаемая цена: " + expectedPrice + ", фактическая: " + actualPrice, expectedPrice, actualPrice, DELTA);
     }

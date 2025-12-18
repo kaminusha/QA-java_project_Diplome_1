@@ -99,7 +99,7 @@ public class BurgerReceiptGenerationTest {
 
     //  Тест: Проверяем, что getReceipt() возвращает ожидаемый чек. Используем разные сценарии
     @Test
-    public void getReceipt_shouldGenerateCorrectReceiptForAllScenarios() {
+    public void getReceiptShouldGenerateCorrectReceiptForAllScenarios() {
         String actualReceipt = burger.getReceipt();
         assertEquals("Тест: " + testScenario + " → ожидаемый чек не совпадает с фактическим", expectedReceipt, actualReceipt);
     }

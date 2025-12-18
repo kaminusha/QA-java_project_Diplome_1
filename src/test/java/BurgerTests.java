@@ -13,16 +13,18 @@ import static org.junit.Assert.assertEquals;
 @RunWith(MockitoJUnitRunner.class)
 public class BurgerTests {  // Используются моки (Bun, Ingredient) через Mockito для изоляции зависимостей
     @Mock
-    private Bun bun;
+    private Bun bun; // Мок-объект булки для тестирования
+
 
     @Mock
-    private Ingredient sauce;
+    private Ingredient sauce; // Мок-объект соуса для тестирования
 
     @Mock
-    private Ingredient filling;
+    private Ingredient filling; // Мок-объект начинки для тестирования
 
-    private Burger burger;
+    private Burger burger; // Тестируемый объект бургера
 
+    // Константы для индексов в списке ингредиентов
     private static final int FIRST_INDEX = 0;
     private static final int SECOND_INDEX = 1;
 
@@ -34,23 +36,23 @@ public class BurgerTests {  // Используются моки (Bun, Ingredien
 
     // Тест для setBuns()
     @Test
-    public void setBuns_whenCalledWithBun_shouldAssignToBurgerBunField() {
+    public void setBunsShouldAssignBunToBurger() {
         burger.setBuns(bun); // Устанавливаем булку в бургер
         assertEquals("Поле bun должно быть установлено в переданную булочку", bun, burger.bun);
     }
 
     // Тесты для addIngredient()
     @Test
-    public void addIngredient_whenCalledOnce_shouldIncreaseIngredientsSizeByOne() {
+    public void addIngredientShouldIncreaseIngredientsSizeByOne() {
         burger.addIngredient(sauce); // Добавляем один ингредиент
         // Проверяем размер списка ингредиентов должен стать равным 1
         assertEquals("Размер списка ингредиентов должен увеличиться на 1", 1, burger.ingredients.size());
     }
 
     @Test
-    public void addIngredient_ShouldAddIngredientToTheEndOfListTest() {
+    public void addIngredientShouldAddToEndOfList() {
         burger.addIngredient(sauce); // Добавляем ингредиент
-        //Проверяем что ингредиент должен быть на первой позиции (индекс 0)
+        // Проверяем, что ингредиент должен быть на первой позиции (индекс 0)
         assertEquals("Добавленный ингредиент должен находиться в начале списка (так как он первый)",
                 sauce, burger.ingredients.get(FIRST_INDEX));
     }
@@ -58,7 +60,7 @@ public class BurgerTests {  // Используются моки (Bun, Ingredien
 
     // Тесты для removeIngredient()
     @Test
-    public void removeIngredient_whenTwoIngredientsPresent_shouldDecreaseSizeByOne() {
+    public void removeIngredientShouldDecreaseSizeByOne() {
         // Добавляем два ингредиента
         burger.addIngredient(sauce);
         burger.addIngredient(filling);
@@ -72,8 +74,9 @@ public class BurgerTests {  // Используются моки (Bun, Ingredien
                 initialSize - 1, burger.ingredients.size());
     }
 
+    // Проверяем, что после удаления первого ингредиента остальные сдвигаются влево
     @Test
-    public void removeIngredient_whenRemovingFirst_shouldShiftRemainingElementsLeft() {
+    public void removeIngredientShouldShiftElementsLeft() {
         // Добавляем два ингредиента
         burger.addIngredient(sauce); // индекс 0
         burger.addIngredient(filling); // индекс 1
@@ -81,12 +84,14 @@ public class BurgerTests {  // Используются моки (Bun, Ingredien
         burger.removeIngredient(FIRST_INDEX);
 
         // на позиции 0 теперь должен быть filling
-        assertEquals("После удаления элемента с индексом 0, на его месте должен быть filling",
+        assertEquals("После удаления элемент должен сдвинуться влево",
                 filling, burger.ingredients.get(FIRST_INDEX));
     }
-    //Тесты для moveIngredient()
+
+    // Тесты для moveIngredient()
+    // Проверяем, что первый ингредиент перемещается на вторую позицию (индекс 1)
     @Test
-    public void moveIngredient_whenSwappingTwo_shouldChangeTheirPositions() {
+    public void moveIngredientShouldMoveFirstIngredientToSecondPosition() {
         // Добавляем два ингредиента
         burger.addIngredient(sauce); // индекс 0
         burger.addIngredient(filling); // индекс 1
@@ -94,16 +99,27 @@ public class BurgerTests {  // Используются моки (Bun, Ingredien
         burger.moveIngredient(FIRST_INDEX, SECOND_INDEX);
 
         // на позиции 0 теперь filling
-        assertEquals("Ингредиент 'filling' должен оказаться на первой позиции",
+        assertEquals("Первый ингредиент должен переместиться на позицию 1",
                 filling, burger.ingredients.get(FIRST_INDEX));
-
-        //
-        assertEquals("После перемещения sauce должен оказаться на второй позиции",
-                sauce, burger.ingredients.get(SECOND_INDEX));
     }
 
+    // Проверяем, что второй ингредиент перемещается на первую позицию (индекс 0)
     @Test
-    public void moveIngredient_whenCalled_shouldNotChangeTotalIngredientsCount() {
+    public void moveIngredientShouldMoveSecondIngredientToFirstPosition () {
+        // Добавляем два ингредиента
+        burger.addIngredient(sauce);   // индекс 0
+        burger.addIngredient(filling);  // индекс 1
+        // Меняем местами элементы с индексами 0 и 1
+        burger.moveIngredient(FIRST_INDEX, SECOND_INDEX);
+
+        // После перемещения sauce должен быть на позиции 1
+        assertEquals("Второй ингредиент должен переместиться на позицию 0",
+            sauce, burger.ingredients.get(SECOND_INDEX));
+        }
+
+    //Проверяем, что общее количество ингредиентов не меняется после перемещения
+    @Test
+    public void moveIngredientShouldNotChangeTotalCount () {
         // Добавляем два ингредиента
         burger.addIngredient(sauce);
         burger.addIngredient(filling);
@@ -113,6 +129,6 @@ public class BurgerTests {  // Используются моки (Bun, Ingredien
 
         // Количество ингредиентов не должно измениться
         assertEquals("Количество ингредиентов не должно измениться после перемещения",
-                initialSize, burger.ingredients.size());
+            initialSize, burger.ingredients.size());
     }
 }
